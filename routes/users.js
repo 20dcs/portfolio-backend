@@ -11,6 +11,11 @@ const dbo = require('../db/conn');
 // This help convert the id from string to ObjectId for the _id.
 const ObjectId = require('mongodb').ObjectId;
 
+// Health check
+userRoutes.route('/').get((req, res) => {
+  res.status(200).send(`Health check`);
+});
+
 // This section will help you get a list of all the userData.
 userRoutes.route('/users').get((req, res) => {
   let db_connect = dbo.getDb('users');
