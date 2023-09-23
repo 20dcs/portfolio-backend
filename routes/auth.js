@@ -101,4 +101,21 @@ router.post("/getuser", fetchuser ,async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+router.get("/getallusers", async (req, res) => {
+  try {
+    // Ensure the user making the request is an admin or has the necessary permissions
+    // if (!req.user.isAdmin) {
+    //   return res.status(403).json({ message: "Access denied" });
+    // }
+
+    // Fetch all users' names and emails (excluding the password field)
+    const users = await User.find({}, "name email").select("-password");
+    // res.render('userlist', { users });
+    res.json(users);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
 module.exports = router;
