@@ -42,21 +42,3 @@ const dataSchema = new mongoose.Schema(
 const Data = mongoose.model("Data", dataSchema);
 
 module.exports = Data;
-
-// const mongoose = require('mongoose');
-
-// const DataSchema = new mongoose.Schema({
-//     user:{
-//         type: mongoose.Schema.Types.ObjectId,
-//         ref: 'user-credentials'
-//     },
-//     userData:{
-//         type: Object,
-//         required: true,
-//     },
-//     date:{
-//         type: Date,
-//         default: Date.now,
-//     }
-// })
-// module.exports = mongoose.model('userdata', DataSchema);
