@@ -5,7 +5,6 @@ const dataSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user-credentials",
-      select: false,
     },
     Color: String,
     Head: {
