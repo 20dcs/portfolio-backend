@@ -14,6 +14,15 @@ router.post(
     body("name", "Enter a valid name").isLength({ min: 3 }),
     body("email", "Enter a valid email").isEmail(),
     body("password", "Enter a valid password").isLength({ min: 5 }),
+    body("username")
+      .matches(/^[a-z0-9]+$/, "i")
+      .withMessage("Username must contain only alphanumeric characters")
+      .custom(value => {
+        if (value.match(/[./_=]/)) {
+          throw new Error('Username must not contain ./_= symbols');
+        }
+        return true;
+      })
   ],
   async (req, res) => {
     let success = false;
@@ -23,15 +32,20 @@ router.post(
     }
     try {
       let user = await User.findOne({ email: req.body.email });
+      let username = await User.findOne({ username: req.body.username });
       if (user) {
         return res
           .status(400)
           .json({success, error: "Sorry a user with this email already exists" });
       }
+      if(username){
+        return res.status(400).json({success, error: "Sorry a user with this username already exists"});
+      }
       const salt = await bcrypt.genSalt(10);
       const secPass = await bcrypt.hash(req.body.password, salt);
       user = await User.create({
         name: req.body.name,
+        username: req.body.username,
         email: req.body.email,
         password: secPass,
       });
@@ -110,7 +124,7 @@ router.get("/getallusers", async (req, res) => {
     // }
 
     // Fetch all users' names and emails (excluding the password field)
-    const users = await User.find({}, "name email").select("-password");
+    const users = await User.find({}).select("-password");
     // res.render('userlist', { users });
     res.json(users);
   } catch (error) {
