@@ -116,6 +116,24 @@ router.post("/getuser", fetchuser ,async (req, res) => {
   }
 });
 
+router.get("/getuserid/:username", async (req, res) => {
+  try {
+    const username = req.params.username;
+    const user = await User.findOne({ username });
+    
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    res.send(user._id);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
+
 router.get("/getallusers", async (req, res) => {
   try {
     // Ensure the user making the request is an admin or has the necessary permissions
